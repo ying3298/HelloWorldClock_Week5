@@ -1,0 +1,73 @@
+function setup() {
+  createCanvas(1000, 800, WEBGL);
+  angleMode(DEGREES);
+}
+
+function draw() {
+  background(2);
+  
+  // 計算每個時間的角度
+  let secondAngle = map(second(), 0, 60, 0, 360);
+  let minuteAngle = map(minute(), 0, 60, 0, 360);
+  let hourAngle = map(hour() % 12, 0, 12, 0, 360); // 12 小時制
+
+  // 設置圓圈的基礎大小
+  let minRadius = 50; // 最小半徑
+  let maxRadius = 300; // 最大半徑
+
+  // 根據時間變化圓圈的大小
+  let secondRadius = map(second(), 0, 60, minRadius, maxRadius); // 秒的半徑
+  let minuteRadius = map(minute(), 0, 60, minRadius, maxRadius); // 分的半徑
+  let hourRadius = map(hour() % 12, 0, 12, minRadius, maxRadius); // 時的半徑
+
+  // 繪製秒的圓圈
+  push();
+  translate(-width / 4, 0, 0); // 左側區塊
+  stroke(255);
+  noFill();
+  strokeWeight(2);
+  ellipse(0, 0, secondRadius * 2, secondRadius * 2); // 繪製圓
+  stroke(255); // 設定為白色
+  strokeWeight(1);
+  for (let i = 0; i < second(); i++) {
+    let angle = map(i, 0, 60, 0, 360);
+    let x = secondRadius * cos(angle);
+    let y = secondRadius * sin(angle);
+    point(x, y); // 繪製點
+  }
+  pop();
+
+  // 繪製分的圓圈
+  push();
+  translate(0, 0, 0); // 中間區塊
+  stroke(255);
+  noFill();
+  strokeWeight(2);
+  ellipse(0, 0, minuteRadius * 2, minuteRadius * 2); // 繪製圓
+  stroke(255); // 設定為白色
+  strokeWeight(1);
+  for (let i = 0; i < minute(); i++) {
+    let angle = map(i, 0, 60, 0, 360);
+    let x = minuteRadius * cos(angle);
+    let y = minuteRadius * sin(angle);
+    point(x, y); // 繪製點
+  }
+  pop();
+
+  // 繪製時的圓圈
+  push();
+  translate(width / 4, 0, 0); // 右側區塊
+  stroke(255);
+  noFill();
+  strokeWeight(2);
+  ellipse(0, 0, hourRadius * 2, hourRadius * 2); // 繪製圓
+  stroke(255); // 設定為白色
+  strokeWeight(1);
+  for (let i = 0; i < hour(); i++) {
+    let angle = map(i, 0, 12, 0, 360); // 12 小時
+    let x = hourRadius * cos(angle);
+    let y = hourRadius * sin(angle);
+    point(x, y); // 繪製點
+  }
+  pop();
+}
