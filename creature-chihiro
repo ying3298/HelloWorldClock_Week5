@@ -103,6 +103,12 @@ function draw() {
     playGif.position(400, 500); // 可以根據需要調整位置
   }
 
+  // 定期更新時間狀態
+  if (millis() - lastTime >= timeInterval * 1000) {
+    timePasses();
+    lastTime = millis(); // 更新最後時間
+  }
+
   // 調試輸出
   console.log("Current State: ", isFinalStage, " Age: ", age, " Hunger: ", hunger, " Happiness: ", happiness);
 }
@@ -129,7 +135,7 @@ function playWithTamagotchi() {
 
 // 冒險功能
 function goOnAdventure() {
-  if (!adventureActive) { // 確保不重複啟動冒險
+  if (!adventureActive && !isFinalStage) { // 確保不重複啟動冒險且不是最終階段
     age++;  // 每次冒險年齡增加
     currentAdventureIndex = floor(random(adventureImages.length)); // 隨機選擇一張冒險圖片
 
@@ -205,15 +211,18 @@ function timePasses() {
   hunger--;
   happiness--;
 
-  if (age >= 3 && hunger > 2 && happiness > 2) {
+  // 檢查是否達到最終階段，確保只執行一次
+  if (!isFinalStage && age >= 3 && hunger > 2 && happiness > 2) {
     isFinalStage = true;
     successMusic.play();
   }
 
+  // 檢查飢餓和幸福狀態
   if (hunger <= 0 || happiness <= 0) {
     fill(255, 0, 0);
     textSize(32);
     text('Chihiro is not happy!', 50, 250);
-    noLoop();
+    noLoop(); // 停止遊戲
   }
 }
+
